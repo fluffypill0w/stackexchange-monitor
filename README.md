@@ -1,2 +1,2 @@
 # stackexchange-monitor
-A bot that monitors StackExchange tags for Slack and Discord
+A Slack app that monitors StackExchange tags - WIP
