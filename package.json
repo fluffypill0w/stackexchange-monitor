@@ -1,0 +1,29 @@
+{
+  "name": "stackexchange-monitor",
+  "version": "1.0.0",
+  "description": "A Slack app that monitors StackExchange tags",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fluffypill0w/stackexchange-monitor.git"
+  },
+  "keywords": [
+    "slack",
+    "stackexchange",
+    "stackoverflow",
+    "typescript",
+    "slack app"
+  ],
+  "author": "fluffypill0w",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fluffypill0w/stackexchange-monitor/issues"
+  },
+  "homepage": "https://github.com/fluffypill0w/stackexchange-monitor#readme",
+  "dependencies": {
+    "@slack/web-api": "^6.4.0"
+  }
+}
