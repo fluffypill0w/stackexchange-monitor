@@ -2,9 +2,13 @@
   "name": "stackexchange-monitor",
   "version": "1.0.0",
   "description": "A Slack app that monitors StackExchange tags",
-  "main": "index.ts",
+  "main": "dist/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rimraf": "./node_modules/rimraf/bin.js",
+    "clean": "rimraf dist",
+    "build": "tsc -p .",
+    "start": "npm run build && node dist/app.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +28,13 @@
   },
   "homepage": "https://github.com/fluffypill0w/stackexchange-monitor#readme",
   "dependencies": {
-    "@slack/web-api": "^6.4.0"
+    "@slack/bolt": "^3.6.0",
+    "dotenv": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5"
   }
 }
