@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "ESNEXT",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
@@ -13,5 +13,5 @@
     "outDir": "dist"
   },
   "include": ["./src"],
-  "exclude": ["./src/app.ts"]
+  "exclude": ["./src/test.ts"]
 }
