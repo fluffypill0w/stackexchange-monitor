@@ -1,13 +1,11 @@
 import * as dotenv from 'dotenv';
 import { sleepMinutes } from 'sleepjs';
-import * as axios from 'axios';
-import { Response } from './utils/structTypes';
+import axios from 'axios';
+import { Item, Response } from './utils/structTypes';
 import pkg from '@slack/bolt';
-import { error } from 'console';
-import { response } from 'express';
 const { App, LogLevel } = pkg;
 
-console.log(dotenv.config());
+//console.log(dotenv.config());
 
 //const channelID = process.env.SLACK_CHANNEL_ID;
 var timeToSleep = true;
@@ -35,27 +33,27 @@ async function watchStackExchange() {
 
     //call the StackExchange API and send parsed response to Slack
     try {
-    //axios.get apparently decided not to be a method today :'(
-        var stackResponse = JSON.parse(JSON.stringify(await axios.get(url)))
-        //sendQuestionToSlack(stackResponse);
+        let res = await axios.get(url)
+        let stackResponse: Item = res.data;
         console.log(stackResponse);
+        //sendQuestionToSlack(stackResponse);
     } catch (error) {
         console.error('error');
     }
 }
 /*
-function sendQuestionToSlack(stackResponse: Response) {
+function sendQuestionToSlack(stackResponse: Item) {
     try {
         console.log('Sending to Slack');
-        for (let Items of stackResponse.Items) {
+        for (let entry of stackResponse.entry) {
             // Call the chat.postMessage method using the WebClient
             let result = app.client.chat.postMessage({
                 channel: 'C02BKJ2B4AK',
-                text: 'New question on <'+Items.Link+'> StackExchange',
+                text: 'New question on <'+Item.Link+'> StackExchange',
                 unfurl_links: true
             });
 
-            if (Items.CreationDate > lastCreationDate) {
+            if (Item.CreationDate > lastCreationDate) {
                 lastCreationDate = Items.CreationDate
             }
 
@@ -66,7 +64,6 @@ function sendQuestionToSlack(stackResponse: Response) {
     }
 }    
 */
-
 // Start the app
 (async () => {
     await app.start(Number(process.env.PORT)|| 3000);
@@ -74,6 +71,8 @@ function sendQuestionToSlack(stackResponse: Response) {
 
     while (timeToSleep = true) {
         watchStackExchange();
-        sleepMinutes(30);
+        timeToSleep = false;
+        await sleepMinutes(30);
+        timeToSleep = true;
     }
 })(); 
