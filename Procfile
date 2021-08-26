@@ -1,1 +1,1 @@
-worker: npm run build && node dist/app.js
+worker: node dist/app.js
