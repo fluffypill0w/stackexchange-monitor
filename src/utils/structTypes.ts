@@ -1,13 +1,10 @@
-export interface Owner {
-    DisplayName: string;
-}
+//TS doesn't iterate over objects, these give errors.
 
 export interface Item {
-    Owner: Owner,
-    CreationDate: number,
-    Link: string,
+    CreationDate: number;
+    Link: string;
 } 
 
 export interface Response {
-    Items: Item[];
+    Items: Item[]
 }

@@ -1,32 +1,30 @@
 import * as dotenv from 'dotenv';
 import { sleepMinutes } from 'sleepjs';
 import axios from 'axios';
-import { Item, Response } from './utils/structTypes';
 import pkg from '@slack/bolt';
 const { App, LogLevel } = pkg;
 
-//console.log(dotenv.config());
+console.log(dotenv.config());
 
-//const channelID = process.env.SLACK_CHANNEL_ID;
+const channelID= process.env.SLACK_CHANNEL_ID!;
 var timeToSleep = true;
 var lastCreationDate = 0;
 
 // Initialize app with bot token and signing secret in .env file
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  //appToken: process.env.SLACK_APP_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   logLevel: LogLevel.DEBUG
 });
 
 // App needs to listen for new StackExchange questions by tag
 async function watchStackExchange() {
-    var url: string = 'https://api.stackexchange.com/2.3/search/advanced?order=desc&sort=creation';
+    var url: string = 'https://api.stackexchange.com/2.3/search?pagesize=1&order=desc&sort=creation';
     url += '&tagged=' + process.env.STACK_EXCHANGE_TAG;
     url += '&site=' + process.env.STACKEXCHANGE;
 
     if (lastCreationDate > 0) {
-        url += '&todate=' + lastCreationDate
+        url += '&pagesize=1&fromdate=' + lastCreationDate
     } else {
         url += '&pagesize=1'
     }
@@ -34,36 +32,41 @@ async function watchStackExchange() {
     //call the StackExchange API and send parsed response to Slack
     try {
         let res = await axios.get(url)
-        let stackResponse: Item = res.data;
-        console.log(stackResponse);
-        //sendQuestionToSlack(stackResponse);
-    } catch (error) {
-        console.error('error');
-    }
+        let json = res.data;
+        console.log(json);
+        
+        let link: string = json.items[0].link;
+        let creationDate: number = json.items[0].creation_date;
+        let title: string = json.items[0].title;
+
+        if (creationDate > lastCreationDate) {
+            lastCreationDate = creationDate += 1
+        }
+
+        sendQuestionToSlack(link, title);
+
+    } catch (err) {
+        console.error(err);
+    } 
 }
-/*
-function sendQuestionToSlack(stackResponse: Item) {
+
+async function sendQuestionToSlack(link: string, title: string) {
     try {
         console.log('Sending to Slack');
-        for (let entry of stackResponse.entry) {
-            // Call the chat.postMessage method using the WebClient
-            let result = app.client.chat.postMessage({
-                channel: 'C02BKJ2B4AK',
-                text: 'New question on <'+Item.Link+'> StackExchange',
+            // Call the Slack 'chat.postMessage' method using the WebClient
+            let result = await app.client.chat.postMessage({
+                channel: channelID,
+                text: '*New question on StackExchange:* \n'+title+' \n<'+link+'>',
                 unfurl_links: true
             });
 
-            if (Item.CreationDate > lastCreationDate) {
-                lastCreationDate = Items.CreationDate
-            }
-
             console.log(result);
-        }
-    } catch (error) {
-        console.error(error);
-    }
+
+    } catch (err) {
+        console.error(err);
+    }   
 }    
-*/
+
 // Start the app
 (async () => {
     await app.start(Number(process.env.PORT)|| 3000);
@@ -71,8 +74,6 @@ function sendQuestionToSlack(stackResponse: Item) {
 
     while (timeToSleep = true) {
         watchStackExchange();
-        timeToSleep = false;
-        await sleepMinutes(30);
-        timeToSleep = true;
+        await sleepMinutes(60);
     }
 })(); 
