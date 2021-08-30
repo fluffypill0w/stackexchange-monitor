@@ -12,18 +12,18 @@ var lastCreationDate = 0;
 
 // Initialize app with bot token and signing secret in .env file
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  token: process.env.SLACK_BOT_TOKEN!,
+  signingSecret: process.env.SLACK_SIGNING_SECRET!,
   logLevel: LogLevel.DEBUG,
   socketMode:true,
-  appToken: process.env.SLACK_APP_TOKEN
+  appToken: process.env.SLACK_APP_TOKEN!
 });
 
 // App needs to listen for new StackExchange questions by tag
 async function watchStackExchange() {
     var url: string = 'https://api.stackexchange.com/2.3/search?pagesize=1&order=desc&sort=creation';
-    url += '&tagged=' + process.env.STACK_EXCHANGE_TAG;
-    url += '&site=' + process.env.STACKEXCHANGE;
+    url += '&tagged=' + process.env.STACK_EXCHANGE_TAG!;
+    url += '&site=' + process.env.STACKEXCHANGE!;
 
     if (lastCreationDate > 0) {
         url += '&fromdate=' + lastCreationDate
@@ -69,7 +69,7 @@ async function sendQuestionToSlack(link: string, title: string) {
 
 // Start the app
 (async () => {
-    await app.start(Number(process.env.PORT)|| 3000);
+    await app.start(Number(process.env.PORT!)|| 3000);
     console.log('⚡️ StackExchangeBot is running!');
 
     while (timeToSleep = true) {
