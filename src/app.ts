@@ -24,10 +24,8 @@ async function watchStackExchange() {
     url += '&site=' + process.env.STACKEXCHANGE;
 
     if (lastCreationDate > 0) {
-        url += '&pagesize=1&fromdate=' + lastCreationDate
-    } else {
-        url += '&pagesize=1'
-    }
+        url += '&fromdate=' + lastCreationDate
+    } 
 
     //call the StackExchange API and send parsed response to Slack
     try {
@@ -53,14 +51,14 @@ async function watchStackExchange() {
 async function sendQuestionToSlack(link: string, title: string) {
     try {
         console.log('Sending to Slack');
-            // Call the Slack 'chat.postMessage' method using the WebClient
-            let result = await app.client.chat.postMessage({
-                channel: channelID,
-                text: '*New question on StackExchange:* \n'+title+' \n<'+link+'>',
-                unfurl_links: true
-            });
+        // Call the Slack 'chat.postMessage' method using the WebClient
+        let result = await app.client.chat.postMessage({
+            channel: channelID,
+            text: '*New question on StackExchange:* \n'+title+' \n<'+link+'>',
+            unfurl_links: true
+        });
 
-            console.log(result);
+        console.log(result);
 
     } catch (err) {
         console.error(err);
@@ -74,6 +72,6 @@ async function sendQuestionToSlack(link: string, title: string) {
 
     while (timeToSleep = true) {
         watchStackExchange();
-        await sleepMinutes(60);
+        await sleepMinutes(30);
     }
 })(); 

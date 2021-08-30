@@ -12,9 +12,8 @@ Coming soon...
 ### Install dependencies
 `npm install`
 
-### Build
+### Compile
 `npm run build`
 
 ### Build and start the app
 `npm run start`
-
