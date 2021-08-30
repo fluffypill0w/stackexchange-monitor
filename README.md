@@ -21,15 +21,14 @@ Go [here](https://api.slack.com/apps/) and click on `Create New App`. Choose the
 `git clone https://github.com/fluffypill0w/stackexchange-monitor.git`
 
 #### Deploy to Heroku
-Make sure you are in the cloned folder:
+Make sure you are in the cloned folder and deploy the app to Heroku:
 
 `cd stackexchange-monitor && heroku create && git push heroku main`
 
 #### Configure your Heroku app 
 You'll need to set all of the variables listed in `.env.sample` as config variables in Heroku:
 
-```heroku config:set SLACK_SIGNING_SECRET=XXX
-heroku config:set SLACK_BOT_TOKEN=XXX```
+`heroku config:set SLACK_SIGNING_SECRET=XXX SLACK_BOT_TOKEN=XXX SLACK_APP_TOKEN=XXX SLACK_CHANNEL_ID=XXX PORT=XXX STACKEXCHANGE_TAG=XXX STACKEXCHANGE=XXX`
 
 ## Contributing
 ### Install dependencies
